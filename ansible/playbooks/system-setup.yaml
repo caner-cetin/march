@@ -11,6 +11,7 @@
           - gcc
           - unzip
           - ufw
+          - screen
         update_cache: yes
     - name: "create ioquake3 server user"
       ansible.builtin.user:

@@ -2,9 +2,16 @@
   hosts: servers
   become: true
   tasks:
+    - name: "copy password config"
+      ansible.builtin.copy:
+        src: rcon_password.cfg
+        dest: /home/ioq3srv/ioquake3/baseq3/rcon_password.cfg
+        owner: ioq3srv
+        group: ioq3srv
+        mode: '0666'
     - name: "run server"
       ansible.builtin.shell: |
         #!/bin/bash
         set -e
         cd /home/ioq3srv/ioquake3/ 
-        screen -S master-server "./ioq3ded.x86_64 +set dedicated 2 +set sv_allowDownload 1 +set com_hunkmegs 64 +set bot_enable 1 +set bot_minplayers 2 +map q3dm17"
+        screen -d -m ./ioq3ded.x86_64 +set dedicated 2 +set sv_allowDownload 1 +set com_hunkmegs 64 +set bot_enable 1 +set bot_minplayers 2 +map q3dm17 +exec rcon_password.cfg
