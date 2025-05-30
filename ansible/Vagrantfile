@@ -1,0 +1,16 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.boot_timeout = 900
+  config.vm.define "unac" do |unac|
+    unac.vm.box = "bento/debian-12"
+    unac.vm.network "private_network", ip: "192.168.50.11"
+    unac.vm.network "forwarded_port", guest: 22, host: 2222, id: "ssh", auto_correct: true
+    unac.vm.network "forwarded_port", guest: 27960, host: 27960, id: "quake", auto_correct: true
+    unac.vm.provider "vmware_desktop" do |v| # vmware works best for ARM macbooks
+      v.vmx["memsize"] = "2048"
+      v.vmx["numvcpus"] = "2"
+    end
+  end
+end

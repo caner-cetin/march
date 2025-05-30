@@ -1,0 +1,72 @@
+- name: "setup // provision the system"
+  hosts: servers
+  become: true
+  tasks:
+    - name: "install required packages"
+      ansible.builtin.apt:
+        pkg:
+          - wget
+          - git
+          - make
+          - gcc
+          - unzip
+          - ufw
+        update_cache: yes
+    - name: "create ioquake3 server user"
+      ansible.builtin.user:
+        name: ioq3srv
+        create_home: yes
+    - name: "execute server compilation script"
+      ansible.builtin.script: server_compile.sh
+      args:
+        chdir: /home/ioq3srv/
+        creates: /home/ioq3srv/ioquake3
+    - name: "copy pak*.pk3 files to server"
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /home/ioq3srv/ioquake3/baseq3/
+        owner: ioq3srv
+        group: ioq3srv
+        mode: '0666'
+      with_fileglob:
+        - "files/pak*.pk3"
+    - name: "unzip patch file"
+      ansible.builtin.shell: |
+        #!/bin/bash
+        set -e
+        cd /home/ioq3srv/ioquake3/
+        wget https://files.ioquake3.org/quake3-latest-pk3s.zip -O quake3-latest-pk3s.zip
+        unzip -o quake3-latest-pk3s.zip
+      become: true
+      args:
+        creates: /home/ioq3srv/ioquake3/quake3-latest-pk3s.zip
+    # - name: "allow ssh"
+    #   community.general.ufw:
+    #     rule: allow
+    #     name: OpenSSH
+    #     state: enabled
+    #   run_once: true
+    # - name: "allow ioq3"
+    #   community.general.ufw:
+    #     rule: allow
+    #     src: "any"
+    #     port: "27960"
+    #     proto: udp
+    #   run_once: true
+    # - name: "allow vagrant host to connect"
+    #   community.general.ufw:
+    #     rule: allow
+    #     src: "{{ ansible_default_ipv4.address }}"
+    #     port: "2222"
+    #     proto: any
+    #   delegate_to: localhost
+    #   run_once: true
+    # - name: "enable ufw with default reject policy"
+    #   community.general.ufw:
+    #     state: enabled
+    #     policy: reject
+    #   run_once: true
+    # - name: "enable ufw logs"
+    #   community.general.ufw:
+    #     logging: 'on'
+    #   run_once: true
