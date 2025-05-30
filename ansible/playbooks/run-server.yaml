@@ -9,7 +9,7 @@
         owner: ioq3srv
         group: ioq3srv
         mode: '0666'
-    - name: "run server"
+    - name: "run server" # todo: stop server playbook with screen -X -S, not sure how to save the screen name...
       ansible.builtin.shell: |
         #!/bin/bash
         set -e
