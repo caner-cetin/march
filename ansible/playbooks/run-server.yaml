@@ -1,0 +1,10 @@
+- name: "start server"
+  hosts: servers
+  become: true
+  tasks:
+    - name: "run server"
+      ansible.builtin.shell: |
+        #!/bin/bash
+        set -e
+        cd /home/ioq3srv/ioquake3/ 
+        screen -S master-server "./ioq3ded.x86_64 +set dedicated 2 +set sv_allowDownload 1 +set com_hunkmegs 64 +set bot_enable 1 +set bot_minplayers 2 +map q3dm17"
