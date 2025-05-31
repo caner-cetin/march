@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cansu's Quake 3 VNC Demo</title>
+    <style>
+        body { margin: 0; background-color: #333; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; font-family: sans-serif; text-align: center; }
+        #vnc_screen_container {
+            border: 2px solid #555;
+            width: 1024px; /* Match your VNC_WIDTH from Docker */
+            height: 768px; /* Match your VNC_HEIGHT from Docker */
+            background-color: #000; /* So it's visible before connection */
+            position: relative; /* For potential overlays or cursor handling */
+        }
+        /* The actual canvas will be injected by noVNC into the container */
+        #controls { margin-top: 15px; }
+        input, button { padding: 10px; margin: 5px; border-radius: 5px; border: 1px solid #777; background-color: #444; color: #fff; }
+        button { cursor: pointer; }
+        button:hover { background-color: #555; }
+        p { max-width: 600px; }
+    </style>
+</head>
+<body>
+    <h1>no god in thunderdome</h1>
+    <p>sunrise on the run, let it come, through your window</p>
+
+    <div id="vnc_screen_container">
+        <!-- noVNC will attach its canvas here -->
+    </div>
+
+    <div id="controls">
+        <label for="password">VNC Password:</label>
+        <input type="password" id="password" value="amcik">
+        <button id="connectButton">Connect to Arena</button>
+        <p id="status">Status: Not Connected</p>
+    </div>
+    <p>Click inside the Quake 3 window (once connected) to lock the mouse cursor for gameplay. Press <b>ESC</b> to unlock.</p>
+
+    <script type="module" src="script/connection.ts"></script>
+</body>
+</html>

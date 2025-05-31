@@ -1,0 +1,20 @@
+name: thunderbolt
+
+services:
+  game-client:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    environment:
+      - VNC_PASSWORD=${VNC_PASSWORD}
+      - VNC_WIDTH=${VNC_WIDTH:-1024}
+      - VNC_HEIGHT=${VNC_HEIGHT:-768}
+      - VNC_DISPLAY_NUM=${VNC_DISPLAY_NUM:-1} # can be 1, 0, whatever is free.
+      - NOVNC_PORT=${NOVNC_PORT:-6080}
+    ports:
+      - ${NOVNC_PORT:-6080}:${NOVNC_PORT:-6080} # websockify mirrors tigervnc for novnc connection, this one is required.
+      # tigervnc port, comment out if you dont want direct access
+      # if VNC is running on display 1, port will be 5901. if display 2, 5902, and so on. 5901 in many cases.
+      - 5901:5901
+    mem_limit: 256MB # 256 MB is more than enough for a quake 3 match, 2 electrified potatos can run quake 3 arena.
+    cpu_count: 1 # just 1 cpu
