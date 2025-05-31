@@ -2,3 +2,6 @@
 .DS_Store
 .vscode
 *.pk3
+Quake_III_Linux
+node_modules
+.env
